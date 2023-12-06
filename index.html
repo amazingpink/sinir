@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/Secang_1.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString') {
+              highlightLayer.setStyle({
+                color: '#ffff00',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: '#ffff00',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
+        var measureControl = new L.Control.Measure({
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        var overlay_GoogleSatellite_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            opacity: 1.0
+        });
+        overlay_GoogleSatellite_0.addTo(map);
+        map.addLayer(overlay_GoogleSatellite_0);
+        function pop_Secang_1(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (i in e.target._eventParents) {
+                        e.target._eventParents[i].resetStyle(e.target);
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2"><strong>DESA</strong><br />' + (feature.properties['DESA'] !== null ? Autolinker.link(String(feature.properties['DESA'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>KODE</strong><br />' + (feature.properties['KODE'] !== null ? Autolinker.link(String(feature.properties['KODE'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>KECAMATAN</strong><br />' + (feature.properties['KECAMATAN'] !== null ? Autolinker.link(String(feature.properties['KECAMATAN'])) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2"><strong>HARGA</strong><br />' + (feature.properties['HARGA'] !== null ? Autolinker.link(String(feature.properties['HARGA'])) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Secang_1_0(feature) {
+            switch(String(feature.properties['DESA'])) {
+                case 'CANDIRETNO':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(206,135,130,1.0)',
+            }
+                    break;
+                case 'CANDISARI':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(251,180,174,1.0)',
+            }
+                    break;
+                case 'CANDORETNO':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(244,105,96,1.0)',
+            }
+                    break;
+                case 'DONOMULYO':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(94,169,230,1.0)',
+            }
+                    break;
+                case 'DONOREJO':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(179,205,227,1.0)',
+            }
+                    break;
+                case 'GIRIKULON':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(117,187,99,1.0)',
+            }
+                    break;
+                case 'JAMBEWANGI':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(204,235,197,1.0)',
+            }
+                    break;
+                case 'KALIJOSO':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(166,136,176,1.0)',
+            }
+                    break;
+                case 'KARANGKAJEN':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(222,203,228,1.0)',
+            }
+                    break;
+                case 'KRINCING':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(153,153,153,1.0)',
+            }
+                    break;
+                case 'MADUSARI':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(230,167,84,1.0)',
+            }
+                    break;
+                case 'MODYOCONDRO':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(254,217,166,1.0)',
+            }
+                    break;
+                case 'NGABEAN':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(191,191,90,1.0)',
+            }
+                    break;
+                case 'NGADIROJO':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(123,220,180,1.0)',
+            }
+                    break;
+                case 'PANCURANMAS':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(247,176,35,1.0)',
+            }
+                    break;
+                case 'PAYAMAN':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(232,178,148,1.0)',
+            }
+                    break;
+                case 'PIRIKAN':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(185,215,93,1.0)',
+            }
+                    break;
+                case 'PUCANG':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(219,105,164,1.0)',
+            }
+                    break;
+                case 'PURWOSARI':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(253,218,236,1.0)',
+            }
+                    break;
+                case 'SECANG':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(211,92,92,1.0)',
+            }
+                    break;
+                case 'SIDOMULYO':
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(187,119,224,1.0)',
+            }
+                    break;
+                default:
+                    return {
+                pane: 'pane_Secang_1',
+                stroke: false, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(79,203,207,1.0)',
+            }
+                    break;
+            }
+        }
+        map.createPane('pane_Secang_1');
+        map.getPane('pane_Secang_1').style.zIndex = 401;
+        map.getPane('pane_Secang_1').style['mix-blend-mode'] = 'normal';
+        var layer_Secang_1 = new L.geoJson(json_Secang_1, {
+            attribution: '<a href=""></a>',
+            pane: 'pane_Secang_1',
+            onEachFeature: pop_Secang_1,
+            style: style_Secang_1_0,
+        });
+        bounds_group.addLayer(layer_Secang_1);
+        map.addLayer(layer_Secang_1);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{'Secang<br /><table><tr><td style="text-align: center;"><img src="legend/Secang_1_CANDIRETNO0.png" /></td><td>CANDIRETNO</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_CANDISARI1.png" /></td><td>CANDISARI</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_CANDORETNO2.png" /></td><td>CANDORETNO</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_DONOMULYO3.png" /></td><td>DONOMULYO</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_DONOREJO4.png" /></td><td>DONOREJO</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_GIRIKULON5.png" /></td><td>GIRIKULON</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_JAMBEWANGI6.png" /></td><td>JAMBEWANGI</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_KALIJOSO7.png" /></td><td>KALIJOSO</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_KARANGKAJEN8.png" /></td><td>KARANGKAJEN</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_KRINCING9.png" /></td><td>KRINCING</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_MADUSARI10.png" /></td><td>MADUSARI</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_MODYOCONDRO11.png" /></td><td>MODYOCONDRO</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_NGABEAN12.png" /></td><td>NGABEAN</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_NGADIROJO13.png" /></td><td>NGADIROJO</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_PANCURANMAS14.png" /></td><td>PANCURANMAS</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_PAYAMAN15.png" /></td><td>PAYAMAN</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_PIRIKAN16.png" /></td><td>PIRIKAN</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_PUCANG17.png" /></td><td>PUCANG</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_PURWOSARI18.png" /></td><td>PURWOSARI</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_SECANG19.png" /></td><td>SECANG</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_SIDOMULYO20.png" /></td><td>SIDOMULYO</td></tr><tr><td style="text-align: center;"><img src="legend/Secang_1_21.png" /></td><td></td></tr></table>': layer_Secang_1,"Google Satellite": overlay_GoogleSatellite_0,}).addTo(map);
+        setBounds();
+        map.addControl(new L.Control.Search({
+            layer: layer_Secang_1,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'DESA'}));
+        </script>
+    </body>
+</html>
